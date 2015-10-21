@@ -3,6 +3,8 @@
 // Views...
 require_once('view/RenderView.php');
 require_once('view/SearchView.php');
+require_once('view/ResultView.php');
+require_once('view/NavigationView.php');
 
 // Controllers...
 require_once('controller/SearchController.php');
@@ -16,11 +18,22 @@ class MasterController {
         
         $renderView = new RenderView();
         
-        $searchModel = new SearchModel();
-        $searchView = new SearchView();
-        $searchController = new SearchController($renderView, $searchView, $searchModel);
+        $resultView = new ResultView();
         
-        $searchController->start();
+        $searchModel = new SearchModel();
+        $searchView = new SearchView($searchModel);
+        $searchController = new SearchController($renderView, $searchView, $searchModel, $resultView);
+        
+        $navigationView = new NavigationView($searchView, $searchModel);
+        
+        $page = $navigationView->checkPage();
+        
+        if($page == "/") {
+           $searchController->Start(); 
+        }
+        
+        else {
+           $searchController->Chords($page);
+        }    
     }
-    
 }

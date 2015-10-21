@@ -2,7 +2,7 @@
 
 class RenderView {
     
-    public function render($view) {
+    public function render($view, $isUserAtResult) {
         echo '<!DOCTYPE html>
         <html>
             <head>
@@ -11,11 +11,18 @@ class RenderView {
             </head>
             <body>
                 <div class="container">
-                    ' . $view->generateSearch() . '
+                    ' . $this->atResult($isUserAtResult) . '
+                    ' . $view->response() . '
                 </div>
             </body>
       </html>
         ';
+    }
+    
+    public function atResult($isUserAtResult) {
+        if($isUserAtResult) {
+          return '<a href="?">Back to search</a>';
+        }
     }
     
 }

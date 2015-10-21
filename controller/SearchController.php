@@ -2,35 +2,56 @@
 
 class SearchController {
     
-    public function __construct(RenderView $renderView, SearchView $searchView, SearchModel $searchModel) {
+    public function __construct(RenderView $renderView, SearchView $searchView, SearchModel $searchModel, ResultView $resultView) {
         $this->renderView = $renderView;
         $this->searchView = $searchView;
         $this->searchModel = $searchModel;
+        $this->resultView = $resultView;
     }
     
-    public function start() {
+    public function Start() {
         
-        //TODO: put model checks here.
         if($this->searchView->isPosted()) {
-            $this->searchField = $this->searchView->getSearchField();
-            $this->userWantsToSearch($this->searchField);
+            
+            try {
+                $this->searchField = $this->searchView->getSearchField();
+                $this->userWantsToSearch($this->searchField);
+            }
+            catch(Exception $e) {
+                $this->searchView->setErrorMessage($e->getMessage());
+            }
         }
+
+        $this->renderSearchView();
+    }
+    
+    
+    // TODO: FIX THIS FUNCTION.
+    public function Chords($songID) {
         
-        $this->renderView->render($this->searchView);
+        
+        $songName = $this->searchModel->getSpecificSong($songID, $artistSongs);
+        $chords = $this->searchModel->getChords();
+        
+        $this->resultView->setSongAndChords($SongName, $chords);
+        $this->renderChordsView();
     }
     
     public function userWantsToSearch($sField) {
-        $result = $this->searchModel->checkDatabase($sField); // Returns $data from database.
         
-        
-        //TODO: Cleanup and fix.
-        //$result[0]['ArtistName'];
-        
-        foreach ($result as $artistsongs)
-        {
-            $artistsongs['SongName'];
-        }
-        //TODO: if(result = null) { "Finns inte i databas..." }
+            $result = $this->searchModel->checkDatabase($sField); // Returns an array from database.
+            $artistNames = $this->searchModel->getArtistNames($result); // Forward the array to another function in model that use the array to get the artist name.
+            $artistSongs = $this->searchModel->getSongNames(/*$result*/); // Forward the array to another function in model that use the array to get an array with song names.
+            
+            $this->searchView->setSearchedArtistAndSongNames($artistNames, $artistSongs);
+    }
+    
+    public function renderSearchView() {
+        $this->renderView->render($this->searchView, false);
+    }
+    
+    public function renderChordsView() {
+        $this->renderView->render($this->resultView, true);
     }
     
 }
