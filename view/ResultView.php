@@ -17,19 +17,19 @@ class ResultView {
     
     public function generateChords() {
         
-        $songList = '<table> <tr>';
+        $chordList = '<table> <tr>';
         
-        foreach($this->chords as $chords) {
-            $songList .= '
+        // foreach($this->chords as $chords) {
+            $chordList .= '
                             <td>
-                                ' . $chords['Chords'] . '
+                                ' . $this->chords . '
                             </td>
                         ';
-        }
+        // }
         
-        $songList .= '</tr> </table>';
+        $chordList .= '</tr> </table>';
         
-        return $songList;
+        return $chordList;
     }
     
 }

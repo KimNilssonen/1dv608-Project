@@ -1,0 +1,56 @@
+body {
+    background-color: DimGray;
+}
+
+.container {
+    width: 600px;
+    padding: 5px;
+    
+    border-radius:5px;
+    
+    background-color:Ivory;
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    text-align:center;
+}
+
+#searchedFor {
+    text-align:left;
+    font-size:20px;
+}
+
+h4 {
+    float:left;
+}
+
+#songList {
+    float: center;
+    margin-top: 7%;
+    margin-left: 10%;
+}
+
+p {
+    text-align:center;
+}
+#error {
+    color: IndianRed;
+}
+
+#searchForm {
+    text-align:center;
+}
+
+legend {
+    font-size: 20px;
+}
+
+a {
+    color: RosyBrown;
+}
+
+
+

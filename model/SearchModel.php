@@ -13,13 +13,22 @@ class SearchModel {
         
         // Open a connection.
         $connection = $this->openConnection();
-        $this->connection = $connection;
         
         // The query that are going to be asked to the database.
         $query = $this->getEverything();
 
+        // Fetch from database using the selected query..
+        $result = $this->fetchFromDatabase($connection, $query);
+        
+        // Close the connection.
+        $this->closeConnection($connection);
+        
+        return $result;
+    }
+    
+    public function fetchFromDatabase($connection, $query) {
         // Save result that you got back from database.
-        $result = $this->connection->query($query);
+        $result = $connection->query($query);
         
         // USE THIS SOLUTION. http://conctus.eu/example/6
         $allrows = array();
@@ -32,11 +41,8 @@ class SearchModel {
         }
         
         // If there is set an array called $allrows return it, otherwise return null.
-        $this->result = $allrows;
+        $allrows;
         return isset($allrows) ? $allrows : null;
-
-        // Close the connection.
-        $this->closeConnection($connection);
     }
     
     
@@ -65,6 +71,7 @@ class SearchModel {
             throw new Exception('Could not find: ' . $this->sField . ' in the database.');
          }
          else {
+            
             $artists = array();
             foreach ($result as $artist) {
                 $artist['ArtistName'];
@@ -72,48 +79,62 @@ class SearchModel {
             }
             
             $this->artistNames = $artists;
-            
             return $this->artistNames;
          }
     }
     
     // Don't use the parameter anymore.
-    public function getSongNames(/*$result*/) {
+    public function getSongNames($result) {
 
-        if(empty($this->result[0]['SongName'])) {
+        if(empty($result[0]['SongName'])) {
             throw new Exception('Could not find: ' . $this->sField . ' in the database.');
         }
         else {
+            
             $artistSongs = array();
-            foreach ($this->result as $songs) {
+            foreach ($result as $songs) {
                 $songs['SongName'];
                 array_push($artistSongs, $songs);
             }
             
             $this->artistSongs = $artistSongs;
-            var_dump($this->artistSongs);
             return $this->artistSongs;
         }
     }
     
-    
-//TODO: FIX THESES FUNCTIONS--------------------------------    
-    public function getSpecificSong($songID, $songs){
-        var_dump($songs);
-        
-        foreach ($songs as $song) {
-            if($song['songID'] == $songID) {
-                var_dump($songs[$songID]);
-                // return $songs[$songID]['SongName'];
-        }
-                
-        }
+    public function askForThisSong($songID){
+        return 'SELECT * 
+                FROM Songs 
+                WHERE Songs.SongID = ' . $songID . ''; 
     }
     
-    public function getChords() {
-        if($this->artistSongs[$songID] == $songID) {
-            return $this->artistSongs[$songID]['Chords'];
-        }
+    
+//TODO: FIX THESES FUNCTIONS--------------------------------    
+    public function getSpecificSong($songID){
+        $connection = $this->openConnection();
+
+        $query = $this->askForThisSong($songID);
+        
+        // Fetch from database using the selected query..
+        $result = $this->fetchFromDatabase($connection, $query);
+        
+        $this->closeConnection($connection);
+        
+        return $result[0]['SongName'];
+    }
+    
+    public function getChords($songID) {
+        $connection = $this->openConnection();
+
+        $query = $this->askForThisSong($songID);
+        
+        // Fetch from database using the selected query..
+        $result = $this->fetchFromDatabase($connection, $query);
+        
+        $this->closeConnection($connection);
+        
+        return $result[0]['Chords'];
+        
     }
 //-----------------------------------------------------------
     

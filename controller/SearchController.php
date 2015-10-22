@@ -25,23 +25,11 @@ class SearchController {
         $this->renderSearchView();
     }
     
-    
-    // TODO: FIX THIS FUNCTION.
-    public function Chords($songID) {
-        
-        
-        $songName = $this->searchModel->getSpecificSong($songID, $artistSongs);
-        $chords = $this->searchModel->getChords();
-        
-        $this->resultView->setSongAndChords($SongName, $chords);
-        $this->renderChordsView();
-    }
-    
     public function userWantsToSearch($sField) {
         
             $result = $this->searchModel->checkDatabase($sField); // Returns an array from database.
             $artistNames = $this->searchModel->getArtistNames($result); // Forward the array to another function in model that use the array to get the artist name.
-            $artistSongs = $this->searchModel->getSongNames(/*$result*/); // Forward the array to another function in model that use the array to get an array with song names.
+            $artistSongs = $this->searchModel->getSongNames($result); // Forward the array to another function in model that use the array to get an array with song names.
             
             $this->searchView->setSearchedArtistAndSongNames($artistNames, $artistSongs);
     }
@@ -52,6 +40,17 @@ class SearchController {
     
     public function renderChordsView() {
         $this->renderView->render($this->resultView, true);
+    }
+    
+     // TODO: FIX THIS FUNCTION.
+    public function Chords($songID) {
+        
+        
+        $songName = $this->searchModel->getSpecificSong($songID);
+        $chords = $this->searchModel->getChords($songID);
+        
+        $this->resultView->setSongAndChords($songName, $chords);
+        $this->renderChordsView();
     }
     
 }
