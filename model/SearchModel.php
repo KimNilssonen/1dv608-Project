@@ -1,5 +1,5 @@
 <?php
-require_once("settings.php");
+
 
 class SearchModel {
     
@@ -11,11 +11,15 @@ class SearchModel {
     public function checkDatabase($sField) {
         $this->sField = $sField;
         
+        if(empty($this->sField)) {
+            throw new Exception("You have to write something in the search field.");
+        }
+        
         // Open a connection.
         $connection = $this->openConnection();
         
         // The query that are going to be asked to the database.
-        $query = $this->getEverything();
+        $query = $this->getEverything($connection);
 
         // Fetch from database using the selected query..
         $result = $this->fetchFromDatabase($connection, $query);
@@ -46,12 +50,12 @@ class SearchModel {
     }
     
     
-    public function getEverything() {
+    public function getEverything($connection) {
         return 'SELECT * 
                 FROM Artists LEFT JOIN Songs 
                 ON Songs.ArtistID = Artists.ArtistID
-                WHERE Artists.ArtistName LIKE  "%' . $this->sField . '%"
-                OR Songs.SongName LIKE  "%' . $this->sField . '%"'; 
+                WHERE Artists.ArtistName LIKE  "%' . $connection->real_escape_string($this->sField) . '%"
+                OR Songs.SongName LIKE  "%' . $connection->real_escape_string($this->sField) . '%"'; 
     }
 
     

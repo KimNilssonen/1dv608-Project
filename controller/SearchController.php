@@ -42,7 +42,6 @@ class SearchController {
         $this->renderView->render($this->resultView, true);
     }
     
-     // TODO: FIX THIS FUNCTION.
     public function Chords($songID) {
         
         

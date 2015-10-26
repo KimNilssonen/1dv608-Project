@@ -13,6 +13,10 @@ require_once('controller/AddSongController.php');
 
 // Models...
 require_once('model/SearchModel.php');
+require_once('model/AddSongModel.php');
+
+// Server settings...
+require_once("settings.php");
 
 class MasterController {
     
@@ -26,7 +30,8 @@ class MasterController {
         $searchView = new SearchView($searchModel);
         $searchController = new SearchController($renderView, $searchView, $searchModel, $resultView);
         
-        $addSongController = new AddSongController($renderView, $addSongView);
+        $addSongModel = new AddSongModel();
+        $addSongController = new AddSongController($renderView, $addSongView, $addSongModel);
         
         $navigationView = new NavigationView($searchView, $searchModel);
         

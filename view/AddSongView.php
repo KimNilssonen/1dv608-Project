@@ -7,14 +7,15 @@ class AddSongView {
     private static $chords = 'AddSongView::Chords';
     private static $postAdd = 'AddSongView::Add';
     
+    private $errorMessage;
     
     public function response() {
         $message = '';
         $response = '';
         
-        // if($this->errorMessage != null) {
-        //     $message = $this->errorMessage;
-        // }
+        if($this->errorMessage != null) {
+            $message = $this->errorMessage;
+        }
         
         $response = $this->generateHTML($message);
         
@@ -28,18 +29,52 @@ class AddSongView {
                 <legend>Enter credentials</legend>
                     <form method = "post">
                         <label>Artist: </label></br>
-                        <input type="text" id="' . self::$artist . '" name="' . self::$artist . '"/></br>
+                        <input type="text" id="' . self::$artist . '" name="' . self::$artist . '" maxlength = "100"/></br>
                         
                         <label>Song name: </label></br>
-                        <input type="text" id="' . self::$song . '" name="' . self::$song . '"/></br>
+                        <input type="text" id="' . self::$song . '" name="' . self::$song . '" maxlength = "100"/></br>
                         
                         <label>Chords: </label></br>
-                        <input type="text" id="' . self::$chords . '" name="' . self::$chords . '"/></br>
+                        <input type="text" id="' . self::$chords . '" name="' . self::$chords . '" maxlength = "250"/></br>
                         
                     	<input type="submit" name="' . self::$postAdd . '" value="Add" />
                     	<p id=error>' . $message . '</p>
+                    	' . $this->success() . '
             	    </form>
         	    </fieldset>
         	';
+    }
+    
+    public function setErrorMessage($e) {
+        $this->errorMessage = $e;
+    }
+    
+    public function isPosted() {
+        if(isset($_POST[self::$postAdd])) {
+            return true;
+        }
+    }
+    
+    public function getArtistField() {
+        return $_POST[self::$artist];
+    }
+    
+    public function getSongField() {
+        return $_POST[self::$song];
+    }
+    
+    public function getChordsField() {
+        return $_POST[self::$chords];
+    }
+    
+    public function success() {
+        if($this->isPosted()) {
+            if(empty($this->errorMessage)) {
+                return '<p>Song added!<p>';
+            }
+            else {
+                return '';
+            }
+        }
     }
 }

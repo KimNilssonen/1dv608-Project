@@ -32,4 +32,5 @@ class ResultView {
         return $chordList;
     }
     
+    
 }

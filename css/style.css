@@ -1,5 +1,8 @@
 body {
-    background-color: DimGray;
+    background: -webkit-linear-gradient(left, red , blue); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, red, blue); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, red, blue); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, Azure, Gainsboro, Gainsboro, Gainsboro, Azure); /* Standard syntax */
 }
 
 .container {
@@ -7,6 +10,7 @@ body {
     padding: 5px;
     
     border-radius:5px;
+    border: 1px solid black;
     
     background-color:Ivory;
     
@@ -14,8 +18,13 @@ body {
     margin-right: auto;
 }
 
-h1 {
+h1, h3 {
     text-align:center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #searchedFor {
