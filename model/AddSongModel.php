@@ -105,8 +105,9 @@ class AddSongModel {
         $query = $this->getArtist($connection, $artistField);
         
         $result = $this->QueryDatabase($connection, $query);
+        $assocResult = $result->fetch_assoc();
         
-        if($result->fetch_assoc()['ArtistName'] == $artistField) {
+        if($assocResult['ArtistName'] == $artistField) {
             return true;
         }
         else {
@@ -118,8 +119,9 @@ class AddSongModel {
         $query = $this->getSong($connection, $songField);
         
         $result = $this->QueryDatabase($connection, $query);
+        $assocResult = $result->fetch_assoc();
         
-        if($result->fetch_assoc()['SongName'] == $songField) {
+        if($assocResult['SongName'] == $songField) {
             return true;
         }
         else {
