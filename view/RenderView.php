@@ -8,7 +8,7 @@ class RenderView {
             <head>
               <meta charset="utf-8">
               <title>Guitardo</title>
-              <link rel="stylesheet" type="text/css" href="../css/style.css">
+              <link rel="stylesheet" type="text/css" href="css/style.css">
             </head>
             <body>
                 <div class="container">

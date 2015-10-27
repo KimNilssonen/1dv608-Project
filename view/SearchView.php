@@ -46,7 +46,7 @@ class SearchView {
             making learning guitar easy!</p>
         <p>Search for <b>artist</b> or <b>song</b> below...</p>
             <form method = "post" id="searchForm">
-                <input type="text" id="' . self::$search . '" name="' . self::$search . '" maxlength = "100" value="Search..."/>
+                <input type="text" id="' . self::$search . '" name="' . self::$search . '" maxlength = "100" placeholder="Search..." />
             	<input type="submit" name="' . self::$postSearch . '" value="Search!" />
             	<p id=error>' . $message . '</p>
         	</form>
@@ -65,6 +65,7 @@ class SearchView {
         if(isset($_POST[self::$postSearch])) {
             return true;
         }
+        return false;
     }
     
     

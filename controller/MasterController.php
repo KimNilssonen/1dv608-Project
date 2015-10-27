@@ -37,7 +37,7 @@ class MasterController {
         
         $page = $navigationView->checkPage();
         
-        if($page == "/" || $page == "/index.php") {
+        if($page == "/" || $page == "/index.php" || $page == "/project/") {
            $searchController->Start(); 
         }
         else if($page == "add"){

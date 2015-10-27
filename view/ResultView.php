@@ -19,14 +19,11 @@ class ResultView {
         
         $chordList = '<table> <tr>';
         
-        // foreach($this->chords as $chords) {
             $chordList .= '
                             <td>
                                 ' . $this->chords . '
                             </td>
                         ';
-        // }
-        
         $chordList .= '</tr> </table>';
         
         return $chordList;

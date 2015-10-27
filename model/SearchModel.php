@@ -33,16 +33,28 @@ class SearchModel {
         
         return $result;
     }
+    private function unescapeString($text){
+        $text = str_replace("\'", "'", $text);
+        $text = str_replace('\"', '"', $text);
+        return $text;
+    }
     
     public function fetchFromDatabase($connection, $query) {
         // Save result that you got back from database.
         $result = $connection->query($query);
-        
         // USE THIS SOLUTION. http://conctus.eu/example/6
         $allrows = array();
         $i = 0;
-        
         while ($row = $result->fetch_assoc()) {
+            if(isset($row['ArtistName'])) {
+                $row['ArtistName'] = $this->unescapeString($row['ArtistName']);
+            }
+            if(isset($row['SongName'])) {
+                $row['SongName'] = $this->unescapeString($row['SongName']);
+            }
+            if(isset($row['Chords'])) {
+                $row['Chords'] = $this->unescapeString($row['Chords']);
+            }
             array_push($allrows,$row);
             $i++;
             
@@ -55,11 +67,11 @@ class SearchModel {
     
     
     public function getEverything($connection) {
-        return 'SELECT * 
-                FROM Artists LEFT JOIN Songs 
-                ON Songs.ArtistID = Artists.ArtistID
-                WHERE Artists.ArtistName LIKE  "%' . $connection->real_escape_string($this->sField) . '%"
-                OR Songs.SongName LIKE  "%' . $connection->real_escape_string($this->sField) . '%"'; 
+        return 'SELECT * '
+                .'FROM Artists LEFT JOIN Songs '
+                .'ON Songs.ArtistID = Artists.ArtistID '
+                .'WHERE Artists.ArtistName LIKE  "%' . $connection->real_escape_string($this->sField) . '%" '
+                .'OR Songs.SongName LIKE  "%' . $connection->real_escape_string($this->sField) . '%"'; 
     }
 
     
@@ -113,17 +125,13 @@ class SearchModel {
     public function askForThisSong($songID){
         return 'SELECT * 
                 FROM Songs 
-                WHERE Songs.SongID = ' . $songID . ''; 
+                WHERE Songs.SongID = "' . $songID . '"'; 
     }
     
-    
-//TODO: FIX THESES FUNCTIONS--------------------------------    
     public function getSpecificSong($songID){
         $connection = $this->openConnection();
 
         $query = $this->askForThisSong($songID);
-        
-        // Fetch from database using the selected query..
         $result = $this->fetchFromDatabase($connection, $query);
         
         $this->closeConnection($connection);
@@ -135,8 +143,6 @@ class SearchModel {
         $connection = $this->openConnection();
 
         $query = $this->askForThisSong($songID);
-        
-        // Fetch from database using the selected query..
         $result = $this->fetchFromDatabase($connection, $query);
         
         $this->closeConnection($connection);
@@ -144,7 +150,6 @@ class SearchModel {
         return $result[0]['Chords'];
         
     }
-//-----------------------------------------------------------
     
     
     public function isUserAtResult() {
