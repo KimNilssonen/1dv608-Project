@@ -43,8 +43,7 @@ class SearchController {
     }
     
     public function Chords($songID) {
-        
-        
+
         $songName = $this->searchModel->getSpecificSong($songID);
         $chords = $this->searchModel->getChords($songID);
         

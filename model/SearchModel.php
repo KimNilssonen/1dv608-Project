@@ -11,6 +11,10 @@ class SearchModel {
     public function checkDatabase($sField) {
         $this->sField = $sField;
         
+        if($this->sField != strip_tags($this->sField)) {
+            throw new Exception("The search field contains forbidden characters.");
+        }
+        
         if(empty($this->sField)) {
             throw new Exception("You have to write something in the search field.");
         }

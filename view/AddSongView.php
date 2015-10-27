@@ -28,14 +28,14 @@ class AddSongView {
                 <fieldset>
                 <legend>Enter credentials</legend>
                     <form method = "post">
-                        <label>Artist: </label></br>
-                        <input type="text" id="' . self::$artist . '" name="' . self::$artist . '" maxlength = "100"/></br>
+                        <label>Artist: </label><br>
+                        <input type="text" id="' . self::$artist . '" name="' . self::$artist . '" maxlength = "100"/><br>
                         
-                        <label>Song name: </label></br>
-                        <input type="text" id="' . self::$song . '" name="' . self::$song . '" maxlength = "100"/></br>
+                        <label>Song name: </label><br>
+                        <input type="text" id="' . self::$song . '" name="' . self::$song . '" maxlength = "100"/><br>
                         
-                        <label>Chords: </label></br>
-                        <input type="text" id="' . self::$chords . '" name="' . self::$chords . '" maxlength = "250"/></br>
+                        <label>Chords: </label><br>
+                        <input type="text" id="' . self::$chords . '" name="' . self::$chords . '" maxlength = "250"/><br>
                         
                     	<input type="submit" name="' . self::$postAdd . '" value="Add" />
                     	<p id=error>' . $message . '</p>

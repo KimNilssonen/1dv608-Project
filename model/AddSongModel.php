@@ -4,19 +4,31 @@ class AddSongModel {
     
     public function AddProcess($artistField, $songField, $chordsField) {
         
-        if(empty($artistField)) {
-            throw new Exception ("You must enter a name of the artist.");    
-        }
-        else if(empty($songField)) {
-            throw new Exception ("You must enter a name of the song.");    
-        }
-        else if(empty($chordsField)) {
-            throw new Exception ("You must enter the chords of the song.");    
-        }
-        
         $formattedArtistField = ucfirst($artistField);
         $formattedSongField = ucfirst($songField);
         $formattedChords = ucwords($chordsField);
+        
+        if($formattedArtistField != strip_tags($formattedArtistField)) {
+            throw new Exception("The artist name contains forbidden characters.");
+        }
+        if($formattedSongField != strip_tags($formattedSongField)) {
+            throw new Exception("The song name contains forbidden characters.");
+        }
+        if($formattedChords != strip_tags($formattedChords)) {
+            throw new Exception("The chords contains forbidden characters.");
+        }
+        
+        if(empty($formattedArtistField)) {
+            throw new Exception ("You must enter a name of the artist.");    
+        }
+        else if(empty($formattedSongField)) {
+            throw new Exception ("You must enter a name of the song.");    
+        }
+        else if(empty($formattedChords)) {
+            throw new Exception ("You must enter the chords of the song.");    
+        }
+        
+        
         
         $connection = $this->OpenConnection();
         
