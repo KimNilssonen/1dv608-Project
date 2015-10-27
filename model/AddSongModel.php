@@ -41,10 +41,10 @@ class AddSongModel {
             $lastInsertedArtistQuery = $this->getArtist($connection, $formattedArtistField);
             $lastInsertedArtistResult = $this->QueryDatabase($connection, $lastInsertedArtistQuery);
             
-            // Getting the artist ID.
-            $artistID = $lastInsertedArtistResult->fetch_assoc()['ArtistID'];
+            // Getting the artist.
+            $latestArtist = $lastInsertedArtistResult->fetch_assoc();
             
-            $query = $this->InsertSong($connection, $artistID, $formattedSongField, $formattedChords);
+            $query = $this->InsertSong($connection, $latestArtist['ArtistID'], $formattedSongField, $formattedChords);
             
             $songResult = $this->QueryDatabase($connection, $query);
         }
@@ -54,7 +54,9 @@ class AddSongModel {
                 $artistQuery = $this->getArtist($connection, $formattedArtistField);
                 $artistResult = $this->QueryDatabase($connection, $artistQuery);
                 
-                $query = $this->InsertSong($connection, $artistResult->fetch_assoc()['ArtistID'], $formattedSongField, $formattedChords);
+                $artistArray = $artistResult->fetch_assoc();
+                
+                $query = $this->InsertSong($connection, $artistArray['ArtistID'], $formattedSongField, $formattedChords);
                
                 $songResult = $this->QueryDatabase($connection, $query);
             }
