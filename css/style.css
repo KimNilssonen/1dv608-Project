@@ -53,6 +53,10 @@ p {
     text-align:center;
 }
 
+#listButton {
+    text-align:center;
+}
+
 legend {
     font-size: 20px;
 }

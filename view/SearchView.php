@@ -4,11 +4,13 @@ class SearchView {
     
     private static $search = 'SearchView::Search';
     private static $postSearch = 'SearchView::PostSearch';
+    private static $list = 'SearchView::List';
     
     private $errorMessage;
     
     public function __construct (SearchModel $searchModel) {
         $this->searchModel = $searchModel;
+        $this->wantsToList = false;
     }
     
     public function response() {
@@ -22,19 +24,33 @@ class SearchView {
         $response = $this->generateHTML($message);
         
         if($this->isUserAtResult()) {
-            $response .= $this->generateResultHTML();
+            if($this->wantsToList) {
+                $response .= $this->generateListHTML();
+            }
+            else {
+                $response .= $this->generateResultHTML();
+            }
         }
         
         return $response;
     }
     
+    public function generateListHTML() {
+        return '
+            <fieldset>
+                <legend>Song list</legend>
+                ' . $this->generateSongList() . '
+            </fieldset>
+        ';
+    }
+    
     public function generateResultHTML() {
         return '
             <fieldset>
-            <legend>Search Result</legend>
-            <p id=searchedFor>Searched for: ' . $this->searchedFor . '</p>
-            
-            <h4>Songs: </h4>' . $this->generateSongList() . '
+                <legend>Search Result</legend>
+                <p id=searchedFor>Searched for: ' . $this->searchedFor . '</p>
+                
+                <h4>Songs: </h4>' . $this->generateSongList() . '
             </fieldset>
         ';
     }
@@ -44,12 +60,16 @@ class SearchView {
         <h1>Welcome to Guitardo</h1>
         <p>Here you can search for different songs or artists to learn the guitar chords,<br> 
             making learning guitar easy!</p>
-        <p>Search for <b>artist</b> or <b>song</b> below...</p>
-            <form method = "post" id="searchForm">
+        <p>Search for <b>artist</b> or <b>song</b>.</p>
+            <form method="post" id="searchForm">
                 <input type="text" id="' . self::$search . '" name="' . self::$search . '" maxlength = "100" placeholder="Search..." />
             	<input type="submit" name="' . self::$postSearch . '" value="Search!" />
             	<p id=error>' . $message . '</p>
         	</form>
+    	<p>Alternative click this button to see all the songs.</p>
+    	<form method="post" id="listButton">
+    	    <input type="submit" name="' . self::$list . '" value="List all songs" />
+    	</form>
     	<p>Cannot find a song?<br>
     	    If you know the chords you can add them by clicking <a href="?add">here</a></p>
         ';
@@ -63,9 +83,26 @@ class SearchView {
     
     public function isPosted() {
         if(isset($_POST[self::$postSearch])) {
+                
+            if(empty($_POST[self::$search])){
+                $this->setErrorMessage("You have to write something in the search field.");
+                return false;
+            }
+            else if($_POST[self::$search] != strip_tags($_POST[self::$search])) {
+                $this->setErrorMessage("The text you've entered contains forbidden characters.");
+                return false;
+            }
+            else {
+                return true;
+            }    
+        }
+    }
+    
+    public function isListPosted() {
+        if(isset($_POST[self::$list])) {
+            $this->wantsToList = true;
             return true;
         }
-        return false;
     }
     
     
@@ -85,10 +122,20 @@ class SearchView {
     
     
     public function setSearchedArtistAndSongNames($artists, $songArray) {
+        
+        if($artists == null || $songArray == null) {
+            $this->setErrorMessage('Not found in database.');
+        }
+        else {
         $this->searchedFor = $this->getSearchField();
         $this->artistNames = $artists;
         $this->songList = $songArray;
+        }
         
+    }
+    
+    public function setSongNames($songArray) {
+        $this->songList = $songArray;
     }
     
     

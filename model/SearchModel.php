@@ -3,6 +3,10 @@
 
 class SearchModel {
     
+    private static $artistForAssocArray = 'ArtistName';
+    private static $songForAssocArray = 'SongName';
+    private static $chordsForAssocArray = 'Chords';
+    
     private $connection;
     private $artistNames;
     private $artistSongs;
@@ -10,14 +14,6 @@ class SearchModel {
     
     public function checkDatabase($sField) {
         $this->sField = $sField;
-        
-        if($this->sField != strip_tags($this->sField)) {
-            throw new Exception("The search field contains forbidden characters.");
-        }
-        
-        if(empty($this->sField)) {
-            throw new Exception("You have to write something in the search field.");
-        }
         
         // Open a connection.
         $connection = $this->openConnection();
@@ -33,6 +29,20 @@ class SearchModel {
         
         return $result;
     }
+    
+    public function listSongs(){
+        
+        $connection = $this->openConnection();
+        
+        $query = $this->listSongsQuery($connection);
+
+        $result = $this->fetchFromDatabase($connection, $query);
+        
+        $this->closeConnection($connection);
+        
+        return $result;
+    }
+    // Made it possible to add stuff with a '. For example Don't.
     private function unescapeString($text){
         $text = str_replace("\'", "'", $text);
         $text = str_replace('\"', '"', $text);
@@ -40,20 +50,23 @@ class SearchModel {
     }
     
     public function fetchFromDatabase($connection, $query) {
+        
         // Save result that you got back from database.
         $result = $connection->query($query);
+        
         // USE THIS SOLUTION. http://conctus.eu/example/6
         $allrows = array();
         $i = 0;
         while ($row = $result->fetch_assoc()) {
-            if(isset($row['ArtistName'])) {
-                $row['ArtistName'] = $this->unescapeString($row['ArtistName']);
+            // Used with unescapeString.
+            if(isset($row[self::$artistForAssocArray])) {
+                $row[self::$artistForAssocArray] = $this->unescapeString($row[self::$artistForAssocArray]);
             }
-            if(isset($row['SongName'])) {
-                $row['SongName'] = $this->unescapeString($row['SongName']);
+            if(isset($row[self::$songForAssocArray])) {
+                $row[self::$songForAssocArray] = $this->unescapeString($row[self::$songForAssocArray]);
             }
-            if(isset($row['Chords'])) {
-                $row['Chords'] = $this->unescapeString($row['Chords']);
+            if(isset($row[self::$chordsForAssocArray])) {
+                $row[self::$chordsForAssocArray] = $this->unescapeString($row[self::$chordsForAssocArray]);
             }
             array_push($allrows,$row);
             $i++;
@@ -73,6 +86,12 @@ class SearchModel {
                 .'WHERE Artists.ArtistName LIKE  "%' . $connection->real_escape_string($this->sField) . '%" '
                 .'OR Songs.SongName LIKE  "%' . $connection->real_escape_string($this->sField) . '%"'; 
     }
+    
+    public function listSongsQuery() {
+        return 'SELECT * '
+                .'FROM Artists LEFT JOIN Songs '
+                .'ON Songs.ArtistID = Artists.ArtistID '; 
+    }
 
     
     public function openConnection() {
@@ -87,8 +106,7 @@ class SearchModel {
     public function getArtistNames($result) {
         
          if(empty($result[0]['ArtistName'])) {
-            
-            throw new Exception('Could not find: ' . $this->sField . ' in the database.');
+            return null;
          }
          else {
             
@@ -107,7 +125,7 @@ class SearchModel {
     public function getSongNames($result) {
 
         if(empty($result[0]['SongName'])) {
-            throw new Exception('Could not find: ' . $this->sField . ' in the database.');
+            return null;
         }
         else {
             
