@@ -10,7 +10,7 @@ class AddController {
     
     public function Start() {
         
-         if($this->addView->isPosted()) {
+        if($this->addView->isPosted()) {
             
                 $this->artistField = $this->addView->getArtistField();
                 $this->songField = $this->addView->getSongField();
@@ -22,7 +22,15 @@ class AddController {
     }
     
     public function userWantsToAdd($artistField,  $songField,  $chordsField) {
-        $this->addModel->AddProcess($artistField, $songField, $chordsField);
+        try {
+            $this->addModel->AddProcess($artistField, $songField, $chordsField);
+        }
+        catch (SongExistsException $e) {
+            $this->addView->songExistsMessage($e); 
+        }
+        catch (ForbiddenCharException $e) {
+            $this->addView->forbiddenCharMessage($e);
+        }
     }
     
 }

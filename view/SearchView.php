@@ -6,6 +6,8 @@ class SearchView {
     private static $postSearch = 'SearchView::PostSearch';
     private static $list = 'SearchView::List';
     
+    private static $notFoundMessage = 'Not found in database!'; 
+    
     private $errorMessage;
     
     public function __construct (SearchModel $searchModel) {
@@ -80,6 +82,11 @@ class SearchView {
         $this->errorMessage = $e;
     }
     
+    public function notFoundErrorMessage($e) {
+        $e = self::$notFoundMessage;
+        $this->errorMessage = $e;
+    }
+    
     
     public function isPosted() {
         if(isset($_POST[self::$postSearch])) {
@@ -122,16 +129,9 @@ class SearchView {
     
     
     public function setSearchedArtistAndSongNames($artists, $songArray) {
-        
-        if($artists == null || $songArray == null) {
-            $this->setErrorMessage('Not found in database.');
-        }
-        else {
-        $this->searchedFor = $this->getSearchField();
-        $this->artistNames = $artists;
-        $this->songList = $songArray;
-        }
-        
+            $this->searchedFor = $this->getSearchField();
+            $this->artistNames = $artists;
+            $this->songList = $songArray;
     }
     
     public function setSongNames($songArray) {

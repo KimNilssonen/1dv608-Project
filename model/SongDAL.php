@@ -13,7 +13,6 @@ class SongDAL {
         $artistQuery = $this->artistDAL->GetArtistQuery($connection, $artistName);
         $artistResult = $connection->query($artistQuery)->fetch_assoc();
         
-        
         $songQuery = $this->InsertSong($connection, $artistResult['ArtistID'], $songName, $chords);
         $songResult = $connection->query($songQuery);
          

@@ -11,11 +11,12 @@ class AddView {
     private static $saveSongField = '';
     private static $saveChordsField = '';
     
+    private static $songExistsMessage = 'Song already exists!'; 
+    private static $forbiddenCharMessage = 'Forbidden characters!';
+    
     private $errorMessage;
     
     public function response() {
-        
-        
         $message = '';
         $response = '';
         
@@ -55,45 +56,49 @@ class AddView {
         $this->errorMessage = $e;
     }
     
+    public function songExistsMessage($e) {
+        $e = self::$songExistsMessage;
+        $this->setErrorMessage($e);
+    }
+    public function forbiddenCharMessage($e) {
+        $e = self::$forbiddenCharMessage;
+        $this->setErrorMessage($e);
+    }
+    
     public function isPosted() {
         if(isset($_POST[self::$postAdd])) {
            
-            try { 
-                self::$saveArtistField = $_POST[self::$artist];
-                self::$saveSongField = $_POST[self::$song];
-                self::$saveChordsField = $_POST[self::$chords];
-                
-                if(empty($_POST[self::$artist])){
-                    $this->setErrorMessage("You have to write something in the artist field.");
-                    return false;
-                }
-                else if($_POST[self::$artist] != strip_tags($_POST[self::$artist])) {
-                    $this->setErrorMessage("The artist you've entered contains forbidden characters.");
-                    return false;
-                }
-                else if(empty($_POST[self::$song])){
-                    $this->setErrorMessage("You have to write something in the song field.");
-                    return false;
-                }
-                else if($_POST[self::$song] != strip_tags($_POST[self::$song])) {
-                    $this->setErrorMessage("The song you've entered contains forbidden characters.");
-                    return false;
-                }
-                else if(empty($_POST[self::$chords])){
-                    $this->setErrorMessage("You have to write something in the chords field.");
-                    return false;
-                }
-                else if($_POST[self::$chords] != strip_tags($_POST[self::$chords])) {
-                    $this->setErrorMessage("The chords you've entered contains forbidden characters.");
-                    return false;
-                }
-                
-                else {
-                    return true;
-                }
+            self::$saveArtistField = $_POST[self::$artist];
+            self::$saveSongField = $_POST[self::$song];
+            self::$saveChordsField = $_POST[self::$chords];
+            
+            if(empty($_POST[self::$artist])){
+                $this->setErrorMessage("You have to write something in the artist field.");
+                return false;
             }
-            catch (\model\SongExistsException $e) {
-                $this->setErrorMessage("Song already exists!");
+            else if($_POST[self::$artist] != strip_tags($_POST[self::$artist])) {
+                $this->setErrorMessage("The artist you've entered contains forbidden characters.");
+                return false;
+            }
+            else if(empty($_POST[self::$song])){
+                $this->setErrorMessage("You have to write something in the song field.");
+                return false;
+            }
+            else if($_POST[self::$song] != strip_tags($_POST[self::$song])) {
+                $this->setErrorMessage("The song you've entered contains forbidden characters.");
+                return false;
+            }
+            else if(empty($_POST[self::$chords])){
+                $this->setErrorMessage("You have to write something in the chords field.");
+                return false;
+            }
+            else if($_POST[self::$chords] != strip_tags($_POST[self::$chords])) {
+                $this->setErrorMessage("The chords you've entered contains forbidden characters.");
+                return false;
+            }
+            
+            else {
+                return true;
             }
         }
     }

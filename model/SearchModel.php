@@ -1,11 +1,13 @@
 <?php
 
+class NotFoundInDatabaseException extends \Exception{};
 
 class SearchModel {
     
     private static $artistForAssocArray = 'ArtistName';
     private static $songForAssocArray = 'SongName';
     private static $chordsForAssocArray = 'Chords';
+    private static $regexDollarSign = '/\$/';
     
     private $connection;
     private $artistNames;
@@ -106,7 +108,7 @@ class SearchModel {
     public function getArtistNames($result) {
         
          if(empty($result[0]['ArtistName'])) {
-            return null;
+            throw new NotFoundInDatabaseException();
          }
          else {
             
@@ -125,7 +127,7 @@ class SearchModel {
     public function getSongNames($result) {
 
         if(empty($result[0]['SongName'])) {
-            return null;
+            throw new NotFoundInDatabaseException();
         }
         else {
             

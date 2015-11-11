@@ -10,12 +10,16 @@ class SearchController {
     }
     
     public function Start() {
-        
-        if($this->searchView->isPosted()) {
-            $this->userWantsToSearch();
+        try {
+            if($this->searchView->isPosted()) {
+                $this->userWantsToSearch();
+            }
+            else if ($this->searchView->isListPosted()) {
+                $this->userWantsToList();
+            }
         }
-        else if ($this->searchView->isListPosted()) {
-            $this->userWantsToList();
+        catch (Exception $e) {
+            $this->searchView->notFoundErrorMessage($e);
         }
         $this->renderSearchView();
     }
@@ -24,12 +28,14 @@ class SearchController {
         
             $searchField = $this->searchView->getSearchField();
             
-            $result = $this->searchModel->checkDatabase($searchField); // Returns an array from database.
             
-            $artistNames = $this->searchModel->getArtistNames($result); // Forward the array to another function in model that use the array to get the artist name.
-            $artistSongs = $this->searchModel->getSongNames($result); // Forward the array to another function in model that use the array to get an array with song names.
+                $result = $this->searchModel->checkDatabase($searchField); // Returns an array from database.
+                
+                $artistNames = $this->searchModel->getArtistNames($result); // Forward the array to another function in model that use the array to get the artist name.
+                $artistSongs = $this->searchModel->getSongNames($result); // Forward the array to another function in model that use the array to get an array with song names.
             
-            $this->searchView->setSearchedArtistAndSongNames($artistNames, $artistSongs);
+                $this->searchView->setSearchedArtistAndSongNames($artistNames, $artistSongs);
+            
     }
     
     public function userWantsToList(){
