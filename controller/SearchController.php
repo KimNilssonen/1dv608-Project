@@ -2,10 +2,11 @@
 
 class SearchController {
     
-    public function __construct(RenderView $renderView, SearchView $searchView, SearchModel $searchModel, ResultView $resultView) {
+    public function __construct(RenderView $renderView, SearchView $searchView, SearchModel $searchModel, LoginModel $loginModel, ResultView $resultView) {
         $this->renderView = $renderView;
         $this->searchView = $searchView;
         $this->searchModel = $searchModel;
+        $this->loginModel = $loginModel;
         $this->resultView = $resultView;
     }
     
@@ -17,6 +18,10 @@ class SearchController {
             else if ($this->searchView->isListPosted()) {
                 $this->userWantsToList();
             }
+            
+            else if($this->searchView->logout()) {
+                $this->loginModel->logout();
+            }
         }
         catch (Exception $e) {
             $this->searchView->notFoundErrorMessage($e);
@@ -25,17 +30,14 @@ class SearchController {
     }
     
     public function userWantsToSearch() {
+        $searchField = $this->searchView->getSearchField();
         
-            $searchField = $this->searchView->getSearchField();
-            
-            
-                $result = $this->searchModel->checkDatabase($searchField); // Returns an array from database.
-                
-                $artistNames = $this->searchModel->getArtistNames($result); // Forward the array to another function in model that use the array to get the artist name.
-                $artistSongs = $this->searchModel->getSongNames($result); // Forward the array to another function in model that use the array to get an array with song names.
-            
-                $this->searchView->setSearchedArtistAndSongNames($artistNames, $artistSongs);
-            
+        $result = $this->searchModel->checkDatabase($searchField); // Returns an array from database.
+        
+        $artistNames = $this->searchModel->getArtistNames($result); // Forward the array to another function in model that use the array to get the artist name.
+        $artistSongs = $this->searchModel->getSongNames($result); // Forward the array to another function in model that use the array to get an array with song names.
+    
+        $this->searchView->setSearchedArtistAndSongNames($artistNames, $artistSongs);
     }
     
     public function userWantsToList(){
@@ -45,13 +47,13 @@ class SearchController {
             $this->searchView->setSongNames($songs);
     }
     
-    
+    // MAY HAVE TO CHANGE "false" PARAMETER. IT's USED FOR CHECKING IF USER IS LOGGED IN.
     public function renderSearchView() {
-        $this->renderView->render($this->searchView, false);
+        $this->renderView->render($this->loginModel->isUserLoggedIn(), $this->searchView, false);
     }
     
     public function renderChordsView() {
-        $this->renderView->render($this->resultView, true);
+        $this->renderView->render($this->loginModel->isUserLoggedIn(), $this->resultView, true);
     }
     
     public function Chords($songID) {

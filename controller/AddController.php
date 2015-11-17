@@ -2,23 +2,24 @@
 
 class AddController {
     
-    public function __construct(RenderView $renderView, addView $addView, AddModel $addModel) {
+    public function __construct(RenderView $renderView, addView $addView, AddModel $addModel, LoginModel $loginModel) {
         $this->renderView = $renderView;
         $this->addView = $addView;
         $this->addModel = $addModel;
+        $this->loginModel = $loginModel;
     }
     
     public function Start() {
         
         if($this->addView->isPosted()) {
             
-                $this->artistField = $this->addView->getArtistField();
-                $this->songField = $this->addView->getSongField();
-                $this->chordsField = $this->addView->getChordsField();
-            
-                $this->userWantsToAdd($this->artistField,  $this->songField,  $this->chordsField);
+            $this->artistField = $this->addView->getArtistField();
+            $this->songField = $this->addView->getSongField();
+            $this->chordsField = $this->addView->getChordsField();
+        
+            $this->userWantsToAdd($this->artistField,  $this->songField,  $this->chordsField);
         }
-        $this->renderView->render($this->addView, true);
+        $this->renderView->render(true, $this->addView, true);
     }
     
     public function userWantsToAdd($artistField,  $songField,  $chordsField) {

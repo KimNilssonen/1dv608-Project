@@ -2,7 +2,7 @@
 
 class RenderView {
     
-    public function render($view, $isUserNotOnStart) {
+    public function render($isLoggedIn, $view, $isUserNotOnStart) {
         echo '<!DOCTYPE html>
         <html>
             <head>
@@ -12,6 +12,7 @@ class RenderView {
             </head>
             <body>
                 <div class="container">
+                    ' . $this->renderIsLoggedIn($isLoggedIn). '
                     ' . $this->atResult($isUserNotOnStart) . '
                     ' . $view->response() . '
                 </div>
@@ -26,4 +27,12 @@ class RenderView {
         }
     }
     
+    private function renderIsLoggedIn($isLoggedIn) {
+    if (!$isLoggedIn) {
+      return '<a href="?login" id="loginLink">Login</a>';
+    }
+    else {
+      return '';
+    }
+  }
 }

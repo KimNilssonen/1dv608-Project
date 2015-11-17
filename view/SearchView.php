@@ -5,13 +5,15 @@ class SearchView {
     private static $search = 'SearchView::Search';
     private static $postSearch = 'SearchView::PostSearch';
     private static $list = 'SearchView::List';
+	private static $logout = 'LoginView::Logout';
     
     private static $notFoundMessage = 'Not found in database!'; 
     
     private $errorMessage;
     
-    public function __construct (SearchModel $searchModel) {
+    public function __construct (SearchModel $searchModel, LoginModel $loginModel) {
         $this->searchModel = $searchModel;
+        $this->loginModel = $loginModel;
         $this->wantsToList = false;
     }
     
@@ -23,7 +25,12 @@ class SearchView {
             $message = $this->errorMessage;
         }
         
-        $response = $this->generateHTML($message);
+       
+       	if($this->loginModel->isUserLoggedIn()){
+			$response .= $this->generateLogoutButtonHTML($message);	
+		}
+		
+        $response .= $this->generateHTML($message);
         
         if($this->isUserAtResult()) {
             if($this->wantsToList) {
@@ -77,6 +84,13 @@ class SearchView {
         ';
     }
     
+	private function generateLogoutButtonHTML($message) {
+	return '
+		<form  method="post" >
+			<input type="submit" name="' . self::$logout . '" value="logout"/>
+		</form>
+	';
+	}
     
     public function setErrorMessage($e) {
         $this->errorMessage = $e;
@@ -121,6 +135,12 @@ class SearchView {
             return false;
         }
     }
+    
+    public function logout(){
+		if(isset($_POST[self::$logout])){
+			return true;
+		}
+	}
     
     
     public function getSearchField() {
