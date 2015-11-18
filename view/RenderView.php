@@ -28,11 +28,11 @@ class RenderView {
     }
     
     private function renderIsLoggedIn($isLoggedIn) {
-    if (!$isLoggedIn) {
-      return '<a href="?login" id="loginLink">Login</a>';
+      if (!$isLoggedIn) {
+        return '<a href="?login" id="loginLink">Login</a>';
+      }
+      if($_SESSION['UserLoggedIn']) {
+          return '<h5>Logged in as admin</h5>';
+      }
     }
-    else {
-      return '';
-    }
-  }
 }

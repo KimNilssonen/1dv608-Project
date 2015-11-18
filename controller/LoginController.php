@@ -16,11 +16,11 @@ class LoginController {
             $this->password = $this->loginView->getPassword();
          
             try {
-                
                 if($this->loginModel->Check($this->username, $this->password)) {
                     
                     // Sends user back to start if the login was successful.
-                    $this->renderView->render($this->loginModel->isUserLoggedIn(), $this->searchView, false);
+                    header("location:?");
+                   // $this->renderView->render($this->loginModel->isUserLoggedIn(), $this->searchView, false);
                 }
             }
             
@@ -34,7 +34,7 @@ class LoginController {
                 $this->loginView->wrongNameOrPassgMessage($e);
             }
         }
-        else {
+        if(!$this->loginModel->isUserLoggedIn()) {
             $this->renderView->render(true, $this->loginView, true);
         }
     }

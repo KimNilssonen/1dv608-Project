@@ -38,6 +38,7 @@ class LoginView {
     
    private function generateLoginFormHTML($message) {
 		return '
+		<p>Login if you want to remove songs.</p>
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
@@ -49,7 +50,7 @@ class LoginView {
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 					
-					<input type="submit" name="' . self::$login . '" value="login" />
+					<input type="submit" name="' . self::$login . '" value="login" action="?" />
 				</fieldset>
 			</form>
 		';

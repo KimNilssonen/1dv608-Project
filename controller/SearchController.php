@@ -2,11 +2,12 @@
 
 class SearchController {
     
-    public function __construct(RenderView $renderView, SearchView $searchView, SearchModel $searchModel, LoginModel $loginModel, ResultView $resultView) {
+    public function __construct(RenderView $renderView, SearchView $searchView, SearchModel $searchModel, LoginModel $loginModel, DeleteModel $deleteModel, ResultView $resultView) {
         $this->renderView = $renderView;
         $this->searchView = $searchView;
         $this->searchModel = $searchModel;
         $this->loginModel = $loginModel;
+        $this->deleteModel = $deleteModel;
         $this->resultView = $resultView;
     }
     
@@ -21,6 +22,10 @@ class SearchController {
             
             else if($this->searchView->logout()) {
                 $this->loginModel->logout();
+            }
+            
+            else if($this->searchView->deletePost()) {
+               $this->deleteModel->deleteSong($this->searchView->getSongToDelete());
             }
         }
         catch (Exception $e) {
@@ -41,13 +46,12 @@ class SearchController {
     }
     
     public function userWantsToList(){
-            $result = $this->searchModel->listSongs();
-            $songs = $this->searchModel->getSongNames($result);
-            
-            $this->searchView->setSongNames($songs);
+        $result = $this->searchModel->listSongs();
+        $songs = $this->searchModel->getSongNames($result);
+        
+        $this->searchView->setSongNames($songs);
     }
     
-    // MAY HAVE TO CHANGE "false" PARAMETER. IT's USED FOR CHECKING IF USER IS LOGGED IN.
     public function renderSearchView() {
         $this->renderView->render($this->loginModel->isUserLoggedIn(), $this->searchView, false);
     }

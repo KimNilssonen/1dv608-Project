@@ -6,6 +6,7 @@ class SearchView {
     private static $postSearch = 'SearchView::PostSearch';
     private static $list = 'SearchView::List';
 	private static $logout = 'LoginView::Logout';
+	private static $delete = 'SearchView::Delete';
     
     private static $notFoundMessage = 'Not found in database!'; 
     
@@ -87,10 +88,29 @@ class SearchView {
 	private function generateLogoutButtonHTML($message) {
 	return '
 		<form  method="post" >
-			<input type="submit" name="' . self::$logout . '" value="logout"/>
+			<input type="submit" name="' . self::$logout . '" value="Logout"/>
 		</form>
 	';
 	}
+	
+	public function generateDeleteButtons($songID) {
+	    if(isset($_SESSION['UserLoggedIn']) && $_SESSION['UserLoggedIn']) {
+	        return '
+                <form  method="post" id="deleteButtons">
+			         <button name="'.self::$delete.'" type="submit" value="'. $songID .'">Delete</button>
+		        </form>
+		';
+	    }
+	}
+	
+	public function getSongToDelete()
+	{
+        return $_POST[self::$delete];
+	}
+	
+	 /* <form  method="post" id="deleteButtons">
+			        <input type="submit" name="' . self::$delete . '" value="Delete"/>
+		        </form>*/
     
     public function setErrorMessage($e) {
         $this->errorMessage = $e;
@@ -141,6 +161,12 @@ class SearchView {
 			return true;
 		}
 	}
+	
+	public function deletePost() {
+	    if(isset($_POST[self::$delete])) {
+	        return true;
+	    }
+	}
     
     
     public function getSearchField() {
@@ -165,7 +191,7 @@ class SearchView {
         foreach($this->songList as $song) {
             $songList .= '<tr>
                             <td>
-                                <a href="?' . $song['SongID'] . '">' . $song['SongName'] . '</a> - ' . $song['ArtistName'] . '
+                                <a href="?' . $song['SongID'] . '">' . $song['SongName'] . '</a> - ' . $song['ArtistName'] . $this->generateDeleteButtons($song['SongID']) . '
                             </td>
                         </tr>';
         }

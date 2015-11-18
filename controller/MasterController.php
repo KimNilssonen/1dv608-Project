@@ -20,6 +20,7 @@ require_once('model/SongDAL.php');
 require_once('model/AddModel.php');
 require_once('model/ConnectionDAL.php');
 require_once('model/LoginModel.php');
+require_once('model/DeleteModel.php');
 
 // Server settings...
 require_once("settings.php");
@@ -32,15 +33,16 @@ class MasterController {
         $resultView = new ResultView();
         $addView = new AddView();
         
-        $loginModel = new LoginModel();
-        $searchModel = new SearchModel();
-        $searchView = new SearchView($searchModel, $loginModel);
-        $searchController = new SearchController($renderView, $searchView, $searchModel,$loginModel, $resultView);
-        
         $connectionDAL = new ConnectionDAL();
         $artistDAL = new ArtistDAL($connectionDAL);
         $songDAL = new SongDAL($connectionDAL, $artistDAL);
         $addModel = new AddModel($artistDAL, $songDAL);
+        
+        $loginModel = new LoginModel();
+        $deleteModel = new DeleteModel($songDAL, $artistDAL);
+        $searchModel = new SearchModel($deleteModel);
+        $searchView = new SearchView($searchModel, $loginModel);
+        $searchController = new SearchController($renderView, $searchView, $searchModel,$loginModel, $deleteModel, $resultView);
         
         $addController = new AddController($renderView, $addView, $addModel, $loginModel);
         

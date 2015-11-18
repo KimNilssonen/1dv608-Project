@@ -19,6 +19,15 @@ class SongDAL {
         $this->connectionDAL->CloseConnection($connection);
     }
     
+    public function DeleteSongFromDatabase($songID) {
+        $connection = $this->connectionDAL->OpenConnection();
+        
+        $songQuery = $this->deleteSongQuery($connection, $songID);
+        $songResult = $connection->query($songQuery);
+         
+        $this->connectionDAL->CloseConnection($connection);
+    }
+    
     public function InsertSong($connection, $artistID, $songField, $formattedChords) {
         return 'INSERT INTO `Songs`(`ArtistID`, `SongName`, `Chords`) 
             VALUES ("' . $connection->real_escape_string($artistID) . '", "' . $connection->real_escape_string($songField) . '", "' . $connection->real_escape_string($formattedChords) . '")';
@@ -26,6 +35,10 @@ class SongDAL {
     
     public function getSong($connection, $songField) {
         return 'SELECT * FROM `Songs` WHERE `SongName` = "' . $connection->real_escape_string($songField) . '"';
+    }
+    
+    public function deleteSongQuery($connection, $songID) {
+        return 'DELETE FROM `Songs` WHERE `SongID` = "' . $connection->real_escape_string($songID) . '"';
     }
     
     public function isSongRegistered($songName) {

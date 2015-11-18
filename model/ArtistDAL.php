@@ -33,6 +33,15 @@ class ArtistDAL {
 
     }
     
+     public function DeleteArtistFromDatabase($artistName) {
+        $connection = $this->connectionDAL->OpenConnection();
+        
+        $artistQuery = $this->deleteArtistQuery($connection, $artistName);
+        $artistResult = $connection->query($artistQuery);
+         
+        $this->connectionDAL->CloseConnection($connection);
+    }
+    
     public function InsertArtistQuery($connection, $artistName) {
         return 'INSERT INTO `Artists`(`ArtistName`) 
             VALUES ("' . $connection->real_escape_string($artistName) . '")';
@@ -40,6 +49,11 @@ class ArtistDAL {
     
     public function GetArtistQuery($connection, $artistName) {
         return 'SELECT * FROM `Artists` WHERE `ArtistName` = "' . $connection->real_escape_string($artistName) . '"';
+    }
+    
+    public function deleteArtistQuery($connection, $artistName) {
+        
+        return 'DELETE FROM `Artists` WHERE `ArtistName` = "' . $connection->real_escape_string($artistName) . '"';
     }
     
     public function isArtistRegistered($artistName) {

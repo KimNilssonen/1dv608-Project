@@ -45,6 +45,15 @@ h4 {
 p {
     text-align:center;
 }
+
+h5 {
+    display:inline;
+}
+
+#deleteButtons {
+    float:left;
+}
+
 #error {
     color: IndianRed;
 }

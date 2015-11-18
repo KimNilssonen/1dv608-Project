@@ -14,6 +14,10 @@ class SearchModel {
     private $artistSongs;
     private $allrows;
     
+    public function __construct(DeleteModel $deleteModel) {
+        $this->deleteModel = $deleteModel;
+    }
+    
     public function checkDatabase($sField) {
         $this->sField = $sField;
         
@@ -125,21 +129,21 @@ class SearchModel {
     
     // Don't use the parameter anymore.
     public function getSongNames($result) {
-
-        if(empty($result[0]['SongName'])) {
-            throw new NotFoundInDatabaseException();
-        }
-        else {
-            
-            $artistSongs = array();
-            foreach ($result as $songs) {
-                $songs['SongName'];
-                array_push($artistSongs, $songs);
+        
+        for($i = 0; $i < count($result); $i++) {
+            if(empty($result[$i]['SongName'])) {
+                $this->deleteModel->deleteArtist($result[$i]['ArtistName']);
             }
-            
-            $this->artistSongs = $artistSongs;
-            return $this->artistSongs;
         }
+    
+        $artistSongs = array();
+        foreach ($result as $songs) {
+            $songs['SongName'];
+            array_push($artistSongs, $songs);
+        }
+        
+        $this->artistSongs = $artistSongs;
+        return $this->artistSongs;
     }
     
     public function askForThisSong($songID){
