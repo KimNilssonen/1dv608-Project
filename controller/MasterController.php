@@ -40,19 +40,19 @@ class MasterController {
         
         $loginModel = new LoginModel();
         $deleteModel = new DeleteModel($songDAL, $artistDAL);
-        $searchModel = new SearchModel($deleteModel);
+        $searchModel = new SearchModel($deleteModel, $connectionDAL);
         $searchView = new SearchView($searchModel, $loginModel);
         $searchController = new SearchController($renderView, $searchView, $searchModel,$loginModel, $deleteModel, $resultView);
         
-        $addController = new AddController($renderView, $addView, $addModel, $loginModel);
+        $addController = new AddController($renderView, $addView, $addModel);
         
-        $loginView = new LoginView($searchView);
-        $loginController = new LoginController($renderView, $searchView, $loginView, $loginModel);
+        $loginView = new LoginView();
+        $loginController = new LoginController($renderView, $loginView, $loginModel);
         
         $navigationView = new NavigationView();
         
         $page = $navigationView->checkPage();
-        
+         
         if($page == "/" || $page == "/index.php" || $page == "/project/") {
            $searchController->Start(); 
         }

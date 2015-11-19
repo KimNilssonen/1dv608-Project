@@ -107,10 +107,6 @@ class SearchView {
 	{
         return $_POST[self::$delete];
 	}
-	
-	 /* <form  method="post" id="deleteButtons">
-			        <input type="submit" name="' . self::$delete . '" value="Delete"/>
-		        </form>*/
     
     public function setErrorMessage($e) {
         $this->errorMessage = $e;

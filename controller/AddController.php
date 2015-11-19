@@ -2,11 +2,10 @@
 
 class AddController {
     
-    public function __construct(RenderView $renderView, addView $addView, AddModel $addModel, LoginModel $loginModel) {
+    public function __construct(RenderView $renderView, addView $addView, AddModel $addModel) {
         $this->renderView = $renderView;
         $this->addView = $addView;
         $this->addModel = $addModel;
-        $this->loginModel = $loginModel;
     }
     
     public function Start() {
