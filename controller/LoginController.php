@@ -2,9 +2,8 @@
 
 class LoginController {
     
-    public function __construct(RenderView $renderView, SearchView $searchView, LoginView $loginView, LoginModel $loginModel) {
+    public function __construct(RenderView $renderView, LoginView $loginView, LoginModel $loginModel) {
         $this->renderView = $renderView;
-        $this->searchView = $searchView;
         $this->loginView = $loginView;
         $this->loginModel = $loginModel;
     }
@@ -20,7 +19,6 @@ class LoginController {
                     
                     // Sends user back to start if the login was successful.
                     header("location:?");
-                   // $this->renderView->render($this->loginModel->isUserLoggedIn(), $this->searchView, false);
                 }
             }
             

@@ -57,7 +57,7 @@ class SearchController {
     }
     
     public function renderChordsView() {
-        $this->renderView->render($this->loginModel->isUserLoggedIn(), $this->resultView, true);
+        $this->renderView->render(true, $this->resultView, true);
     }
     
     public function Chords($songID) {

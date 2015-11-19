@@ -14,15 +14,16 @@ class SearchModel {
     private $artistSongs;
     private $allrows;
     
-    public function __construct(DeleteModel $deleteModel) {
+    public function __construct(DeleteModel $deleteModel, ConnectionDAL $connectionDAL) {
         $this->deleteModel = $deleteModel;
+        $this->connectionDAL = $connectionDAL;
     }
     
     public function checkDatabase($sField) {
         $this->sField = $sField;
         
         // Open a connection.
-        $connection = $this->openConnection();
+        $connection = $this->connectionDAL->OpenConnection();
         
         // The query that are going to be asked to the database.
         $query = $this->getEverything($connection);
@@ -31,20 +32,20 @@ class SearchModel {
         $result = $this->fetchFromDatabase($connection, $query);
         
         // Close the connection.
-        $this->closeConnection($connection);
+        $this->connectionDAL->CloseConnection($connection);
         
         return $result;
     }
     
     public function listSongs(){
         
-        $connection = $this->openConnection();
+        $connection = $this->connectionDAL->OpenConnection();
         
         $query = $this->listSongsQuery($connection);
 
         $result = $this->fetchFromDatabase($connection, $query);
         
-        $this->closeConnection($connection);
+        $this->connectionDAL->CloseConnection($connection);
         
         return $result;
     }
@@ -98,16 +99,6 @@ class SearchModel {
                 .'FROM Artists LEFT JOIN Songs '
                 .'ON Songs.ArtistID = Artists.ArtistID '; 
     }
-
-    
-    public function openConnection() {
-            $this->connection = mysqli_connect(settings::$hostname, settings::$username, settings::$password, settings::$db, settings::$port)or die(mysql_error());
-            return $this->connection;
-    }
-    
-    public function closeConnection($connection) {
-        $connection->close();
-    }
     
     public function getArtistNames($result) {
         
@@ -153,23 +144,23 @@ class SearchModel {
     }
     
     public function getSpecificSong($songID){
-        $connection = $this->openConnection();
+        $connection = $this->connectionDAL->OpenConnection();
 
         $query = $this->askForThisSong($songID);
         $result = $this->fetchFromDatabase($connection, $query);
         
-        $this->closeConnection($connection);
+        $this->connectionDAL->CloseConnection($connection);
         
         return $result[0]['SongName'];
     }
     
     public function getChords($songID) {
-        $connection = $this->openConnection();
+        $connection = $this->connectionDAL->OpenConnection();
 
         $query = $this->askForThisSong($songID);
         $result = $this->fetchFromDatabase($connection, $query);
         
-        $this->closeConnection($connection);
+        $this->connectionDAL->CloseConnection($connection);
         
         return $result[0]['Chords'];
         

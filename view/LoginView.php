@@ -18,11 +18,6 @@ class LoginView {
     private static $WrongNameOrPassgMessage = 'Wrong username or password.';
     private $errorMessage;
     
-    public function __construct (SearchView $searchView) {
-        $this->searchView = $searchView;
-        
-    }
-    
     public function response() {
         $message = '';
         $response = '';

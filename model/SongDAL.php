@@ -38,6 +38,7 @@ class SongDAL {
     }
     
     public function deleteSongQuery($connection, $songID) {
+        
         return 'DELETE FROM `Songs` WHERE `SongID` = "' . $connection->real_escape_string($songID) . '"';
     }
     
