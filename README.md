@@ -2,6 +2,7 @@
 
 Read wiki for more info: https://github.com/kn222gp/1dv608-Project/wiki
 
+Link to essay: https://docs.google.com/document/d/1ICSo1Z_B9lVWFrHkn-Twe5Mwu28ndsduFdRufox74nI/edit?usp=sharing
 
 ####Installation instructions
 * Download the sourcecode.
